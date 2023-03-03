@@ -1,11 +1,14 @@
 package com.salazar.salazarmoneyapi.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.springframework.lang.NonNull;
 
 import java.util.Objects;
 
@@ -20,7 +23,8 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
-
+    @NotNull
+    @Size(min = 3, max = 20)
     private String nome;
 
     @Override
