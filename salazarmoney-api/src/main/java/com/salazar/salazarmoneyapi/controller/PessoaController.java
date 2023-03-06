@@ -1,5 +1,6 @@
 package com.salazar.salazarmoneyapi.controller;
 
+import com.salazar.salazarmoneyapi.domain.model.Categoria;
 import com.salazar.salazarmoneyapi.domain.model.Pessoa;
 import com.salazar.salazarmoneyapi.domain.repository.PessoaRepository;
 import com.salazar.salazarmoneyapi.event.RecursoCriadoEvent;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -22,6 +24,12 @@ public class PessoaController {
 
     @Autowired
     private ApplicationEventPublisher publisher;
+
+    @GetMapping
+    public ResponseEntity<?>  listarTudo() {
+        List<Pessoa> categorias = pessoaRepository.findAll();
+        return !categorias.isEmpty() ? ResponseEntity.ok(categorias) : ResponseEntity.noContent().build();
+    }
 
     @PostMapping
     public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
@@ -36,5 +44,12 @@ public class PessoaController {
         return this.pessoaRepository.findById(codigoId)
                 .map(peloCodigo -> ResponseEntity.ok(peloCodigo))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{codigoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long codigoId ){
+        pessoaRepository.deleteById(codigoId);
+
     }
 }
